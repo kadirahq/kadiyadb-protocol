@@ -1,6 +1,9 @@
 syntax = "proto3";
 package protocol;
 
+// required to make non-pointer Point struct slices
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
 // Point contains the sum of all values measured in a time slot
 // and the number of measurements. This can be used to calculate
 // the mean value for gauges or the total for counter values.
@@ -13,7 +16,7 @@ message Point {
 // by a set of text fields. Series are limited to an epoch duration.
 message Series {
   repeated string fields = 1;
-  repeated Point points = 2;
+  repeated Point points = 2 [(gogoproto.nullable) = false];
 }
 
 // Chunk is a set of series which belong to a an epoch duration.

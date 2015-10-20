@@ -23,6 +23,8 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+
 import strings "strings"
 import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 import sort "sort"
@@ -51,13 +53,13 @@ func (*Point) ProtoMessage() {}
 // by a set of text fields. Series are limited to an epoch duration.
 type Series struct {
 	Fields []string `protobuf:"bytes,1,rep,name=fields" json:"fields,omitempty"`
-	Points []*Point `protobuf:"bytes,2,rep,name=points" json:"points,omitempty"`
+	Points []Point  `protobuf:"bytes,2,rep,name=points" json:"points"`
 }
 
 func (m *Series) Reset()      { *m = Series{} }
 func (*Series) ProtoMessage() {}
 
-func (m *Series) GetPoints() []*Point {
+func (m *Series) GetPoints() []Point {
 	if m != nil {
 		return m.Points
 	}
@@ -196,7 +198,7 @@ func (this *Series) Equal(that interface{}) bool {
 		return false
 	}
 	for i := range this.Points {
-		if !this.Points[i].Equal(that1.Points[i]) {
+		if !this.Points[i].Equal(&that1.Points[i]) {
 			return false
 		}
 	}
@@ -396,7 +398,7 @@ func (this *Series) GoString() string {
 	s = append(s, "&protocol.Series{")
 	s = append(s, "Fields: "+fmt.Sprintf("%#v", this.Fields)+",\n")
 	if this.Points != nil {
-		s = append(s, "Points: "+fmt.Sprintf("%#v", this.Points)+",\n")
+		s = append(s, "Points: "+strings.Replace(fmt.Sprintf("%#v", this.Points), `&`, ``, 1)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -944,7 +946,7 @@ func (this *Series) String() string {
 	}
 	s := strings.Join([]string{`&Series{`,
 		`Fields:` + fmt.Sprintf("%v", this.Fields) + `,`,
-		`Points:` + strings.Replace(fmt.Sprintf("%v", this.Points), "Point", "Point", 1) + `,`,
+		`Points:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Points), "Point", "Point", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1187,7 +1189,7 @@ func (m *Series) Unmarshal(data []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Points = append(m.Points, &Point{})
+			m.Points = append(m.Points, Point{})
 			if err := m.Points[len(m.Points)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
 				return err
 			}

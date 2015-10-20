@@ -1,0 +1,19 @@
+{
+  "name": "kadiyadb-protocol",
+  "version": "0.0.1",
+  "description": "Protocol definitions and helpers for KadiyadB",
+  "main": "protocol.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kadirahq/kadiyadb-protocol.git"
+  },
+  "author": "Kadira Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kadirahq/kadiyadb-protocol/issues"
+  },
+  "homepage": "https://github.com/kadirahq/kadiyadb-protocol#readme",
+  "dependencies": {
+    "protobufjs": "4.0.x"
+  }
+}

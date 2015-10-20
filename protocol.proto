@@ -1,0 +1,60 @@
+syntax = "proto3";
+package protocol;
+
+// Point contains the sum of all values measured in a time slot
+// and the number of measurements. This can be used to calculate
+// the mean value for gauges or the total for counter values.
+message Point {
+  double total = 1;
+  double count = 2;
+}
+
+// Series is a series of points which can be uniquely identified
+// by a set of text fields. Series are limited to an epoch duration.
+message Series {
+  repeated string fields = 1;
+  repeated Point points = 2;
+}
+
+// Chunk is a set of series which belong to a an epoch duration.
+// To get the complete result, series from all chunks should be
+// concatenated and zero values should be added for missing data.
+message Chunk {
+  uint64 from = 1;
+  uint64 to = 2;
+  repeated Series series = 3;
+}
+
+// ReqTrack requests the server to record a measurement/measurements
+// The time should be given in nanoseconds but it will be floored by
+// the resolution of the database when it's saved.
+message ReqTrack {
+  string database = 1;
+  uint64 time = 2;
+  double total = 3;
+  double count = 4;
+  repeated string fields = 5;
+}
+
+// ResTrack is the response to a track request. It only contains an
+// error field which will have an empty string if there are no errors.
+message ResTrack {
+  string error = 1;
+}
+
+// ReqFetch requests measurements from the server for a time range (ns).
+// The field pattern (supports wildcards) are used to identify data.
+message ReqFetch {
+  string database = 1;
+  uint64 from = 2;
+  uint64 to = 3;
+  repeated string fields = 4;
+}
+
+// ResTrack is the response to a track request. The result is divided into
+// chunks (by epoch). It also contains an error field which will have an
+// empty string if there are no errors.
+message ResFetch {
+  string error = 1;
+  repeated Chunk chunks = 2;
+}

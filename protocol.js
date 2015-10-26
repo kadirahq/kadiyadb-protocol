@@ -74,6 +74,37 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "Request",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "uint32",
+                            "name": "id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ReqTrack",
+                            "name": "track",
+                            "id": 2,
+                            "oneof": "req"
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ReqFetch",
+                            "name": "fetch",
+                            "id": 3,
+                            "oneof": "req"
+                        }
+                    ],
+                    "oneofs": {
+                        "req": [
+                            2,
+                            3
+                        ]
+                    }
+                },
+                {
                     "name": "ReqTrack",
                     "fields": [
                         {
@@ -109,17 +140,6 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
-                    "name": "ResTrack",
-                    "fields": [
-                        {
-                            "rule": "optional",
-                            "type": "string",
-                            "name": "error",
-                            "id": 1
-                        }
-                    ]
-                },
-                {
                     "name": "ReqFetch",
                     "fields": [
                         {
@@ -145,6 +165,48 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "string",
                             "name": "fields",
                             "id": 4
+                        }
+                    ]
+                },
+                {
+                    "name": "Response",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "uint32",
+                            "name": "id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ResTrack",
+                            "name": "track",
+                            "id": 2,
+                            "oneof": "res"
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ResFetch",
+                            "name": "fetch",
+                            "id": 3,
+                            "oneof": "res"
+                        }
+                    ],
+                    "oneofs": {
+                        "res": [
+                            2,
+                            3
+                        ]
+                    }
+                },
+                {
+                    "name": "ResTrack",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "error",
+                            "id": 1
                         }
                     ]
                 },

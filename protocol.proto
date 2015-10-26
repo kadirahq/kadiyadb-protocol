@@ -28,6 +28,15 @@ message Chunk {
   repeated Series series = 3;
 }
 
+// Request ...
+message Request {
+  uint32 id = 1;
+  oneof req {
+    ReqTrack track = 2;
+    ReqFetch fetch = 3;
+  }
+}
+
 // ReqTrack requests the server to record a measurement/measurements
 // The time should be given in nanoseconds but it will be floored by
 // the resolution of the database when it's saved.
@@ -39,12 +48,6 @@ message ReqTrack {
   repeated string fields = 5;
 }
 
-// ResTrack is the response to a track request. It only contains an
-// error field which will have an empty string if there are no errors.
-message ResTrack {
-  string error = 1;
-}
-
 // ReqFetch requests measurements from the server for a time range (ns).
 // The field pattern (supports wildcards) are used to identify data.
 message ReqFetch {
@@ -52,6 +55,21 @@ message ReqFetch {
   uint64 from = 2;
   uint64 to = 3;
   repeated string fields = 4;
+}
+
+// Response ...
+message Response {
+  uint32 id = 1;
+  oneof res {
+    ResTrack track = 2;
+    ResFetch fetch = 3;
+  }
+}
+
+// ResTrack is the response to a track request. It only contains an
+// error field which will have an empty string if there are no errors.
+message ResTrack {
+  string error = 1;
 }
 
 // ResTrack is the response to a track request. The result is divided into
